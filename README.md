@@ -1,9 +1,7 @@
 # Sparkup 
 #### Customizable Screenshot Canvas
 
-## delete-sparkup-demo.gif
 
-![demo](delete-sparkup-demo.gif)
 
 ## delete-sparkup-demo.webm
 

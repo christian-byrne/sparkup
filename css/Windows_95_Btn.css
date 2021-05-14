@@ -1,0 +1,48 @@
+
+                                                                                   
+/*   / |  / /                                                       ___      ____  
+||  /  | / / ( )   __      ___   /  ___                   ___     //   / / //      
+|| / /||/ / / / //   ) ) //   ) / //   ) ) //  / /  / / ((   ) ) ((___/ / //__     
+||/ / |  / / / //   / / //   / / //   / / //  / /  / /   \ \         / /      ) )  
+|  /  | / / / //   / / ((___/ / ((___/ / ((__( (__/ / //   ) )      / / ((___/*/   
+
+
+@font-face {
+  font-family: windows;
+  src: url('../fonts/AAA---windows.ttf') format("truetype");
+}
+.windowsBtn,
+#popbtn {
+  font-size: 40px;
+  color: #00a;
+  background-color: rgb(165, 164, 164);
+  border: 7px;
+  border-left-color: rgb(226, 225, 225);
+  border-top-color: rgb(226, 225, 225);
+  border-right-color: rgb(48, 47, 47);
+  border-bottom-color:  rgb(48, 47, 47);
+  border-style: ridge;
+  outline: none;
+  cursor: pointer;
+  font-family: windows;
+  z-index: 10;
+
+  
+}
+.windowsBtn:hover,
+#popbtn:hover {
+  font-size: 40px;
+  background-color: rgb(165, 164, 164);
+  border: 6px inset;
+  outline: none;
+  cursor: pointer;
+  border: 2px inset;
+  color: blue;
+  font-family: windows;
+  position: relative;
+  z-index: 10;
+  font-family: windows;
+
+
+}
+  

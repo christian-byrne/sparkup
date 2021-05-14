@@ -1,0 +1,37 @@
+.tutorialIcon{
+  width: 5.5%;
+  display: block;
+  cursor: pointer;
+  z-index: 11;
+  position: absolute;
+  background: transparent;
+  opacity: 1;
+  top: 1.8%;
+  left: 92%;
+}
+
+.tutorialModal-btn{
+  position: absolute;
+
+}
+
+.tutorialModal-btn:hover{
+  position: absolute;
+  opacity: .8;
+
+
+}
+
+
+.tutorialIcon:hover {
+  opacity: .8;
+}
+
+
+/*   <!-- Tutorial Modal -->
+    <div id="tutorialModal-btn">
+      <img class="tutorialIcon" src="Downloaders/Icons/rockingwithlights (14)14.png">
+      <img class="tutorialIcon" src="Downloaders/Icons/rockingwithlights38.png">
+    </div>
+
+*/

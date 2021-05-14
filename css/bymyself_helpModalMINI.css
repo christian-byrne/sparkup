@@ -1,0 +1,67 @@
+  @font-face {
+    font-family: windows;
+    src: url('../fonts/AAA---windows.ttf') format("truetype");
+  }
+
+  .formpop {
+    display: none;
+    z-index: 100;
+    flex-direction: column;
+    background-color: #aaa;
+    width: 26%;
+    height: 17%;
+    justify-content: stretch;
+    align-items: stretch;
+    overflow: hidden;
+    position: absolute;
+    top: 79%;
+    left: 2%;
+    font-family: windows;
+    border: 9px;
+    border-left-color: rgb(226, 225, 225);
+    border-top-color: rgb(226, 225, 225);
+    border-right-color: rgb(48, 47, 47);
+    border-bottom-color:  rgb(48, 47, 47);
+    border-style: groove;
+    
+}
+
+.buttonRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+.formpop_content {
+    display: flex;
+    font-family: windows;
+    font-size: 1.3em;
+    flex-direction: row;
+    margin-left: 4%;
+    align-self: center
+}
+
+#popbtn {
+  font-size: 1.5em;
+  padding: .1em;
+  margin: 2%;
+}
+
+#popbtn:hover {
+  font-size: 1.5em;
+  padding: .1em;
+  margin: 2%;
+}
+
+.icon1 {
+  width: 90px;
+  cursor: pointer;
+  z-index: 11;
+  background: transparent;
+  opacity: .7;  
+  display: flex;
+  margin: 2%;
+}
+
+

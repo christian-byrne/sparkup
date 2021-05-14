@@ -1,0 +1,165 @@
+/*  
+ <div class="clockContainer">
+ <h3 id="VHSclockTime" class="VHSclock glitch"></h3>
+ <h3 id="VHSclockDay" class="VHSclockBot glitch"></h3>
+ <h3 id="VHSclockGlow" class="glow"></h3>
+ </div>
+<div class="scanlines"></div>
+*/
+
+@font-face {
+	font-family: vcr;
+	src: url('../fonts/AAA---vcr.ttf') format("truetype");
+}
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 0px red, 0 0 0px red, 0 0 .05px lawngreen, 0 0 .07px lawngreen, 0 0 .1px lawngreen, 0 0 .12px lawngreen, 0 0 .15px lawngreen;
+  }
+  to {
+    text-shadow: 0 0 .2px red, 0 0 .2px chartreuse, 0 0 .3px lawngreen, 0 0 .4px lawngreen, 0 0 .5px lawngreen, 0 0 .6px lawngreen, 0 0 .7px lawngreen;
+  }
+}
+
+.clockContainer {
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	height: 2%;
+	width: 30%;
+	margin-top: 3%;
+	left: 1.4%;
+	position: absolute;
+	flex-direction: column;
+  	-webkit-animation: glow 1s ease-in-out infinite alternate;
+  	-moz-animation: glow 1s ease-in-out infinite alternate;
+  	animation: glow 1s ease-in-out infinite alternate;
+
+}
+.VHSclock,
+.VHSclockBot {
+	z-index: 200;
+	margin: 0 0 0 0;
+	padding: 0 3.2px 0 1.6px ;
+	display: flex;
+  /*	background-color: rgba(0, 0, 0, .8); */
+	opacity: .8;
+	font-size: 2.1em;
+	font-family: vcr;
+	letter-spacing: .1px;
+	font-weight: 300;
+	font-style: normal;
+	border-radius: .7px;
+  margin-bottom: -3px;
+  margin-top: -3px;
+}
+
+.glitch {
+  color: rgb(223, 191, 191);
+  position: relative;
+  animation: glitch 25s 25.24s infinite;
+}
+
+.glitch::before {
+  content: attr(data-text);
+  position: absolute;
+  left: -1px;
+  text-shadow: -5px 0 magenta;
+  background: black;
+  overflow: hidden;
+   	top: 3%;
+  animation: noise-1 3s linear infinite alternate-reverse, glitch 25s 25.45s infinite;
+}
+
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 1px;
+  text-shadow: -4px 0 lightgreen;
+  background: black;
+  overflow: hidden;
+  top: 3%;
+  animation: noise-2 1s linear infinite alternate-reverse, glitch 25s 25s infinite;
+}
+
+/* change this to alter intensity of animation */
+@keyframes glitch {
+  1%{
+    transform: rotateX(10deg) skewX(60deg);
+  }
+  2%{
+    transform: rotateX(0deg) skewX(0deg);
+  }
+}
+
+@keyframes noise-1 {
+  $steps: 30;
+  @for $i from 1 through $steps {
+    #{percentage($i*(1/$steps))} {
+      $top: random(100);
+      $bottom: random(101 - $top);
+      clip-path: inset(#{$top}px 0 #{$bottom}px 0);
+    }
+  }
+}
+
+@keyframes noise-2 {
+  $steps: 30;
+  @for $i from 0 through $steps {
+    #{percentage($i*(1/$steps))} {
+      $top: random(100);
+      $bottom: random(101 - $top);
+      clip-path: inset(#{$top}px 0 #{$bottom}px 0);
+    }
+  }
+}
+
+.scanlines {
+  overflow: hidden;
+  mix-blend-mode: difference;
+}
+
+.scanlines::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) .5%,
+    transparent 1%
+  );
+
+  animation: fudge 7s ease-in-out alternate infinite;
+}
+
+
+@keyframes fudge {
+  from {
+    transform: translate(0px, 0px);
+  }
+  to {
+    transform: translate(0px, 2%);
+  }
+}
+
+.glow {
+  @extend .glitch;
+  text-shadow: 0 0 1000px rgb(223, 191, 191);
+  color: transparent;
+  position: absolute;
+   	top: 3%;
+}
+
+
+@keyframes glitch-2 {
+  1%{
+    transform: rotateX(10deg) skewX(70deg);
+  }
+  2%{
+    transform: rotateX(0deg) skewX(0deg);
+  }
+}

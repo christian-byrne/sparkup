@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Sparkup Canvas</title>
+
+    <!-- Code Mirror -->
+    <link rel="stylesheet" href="js/normalize.min.css">
+    <link rel='stylesheet' href='css/codemirror.css'>
+    <link rel='stylesheet' href='css/twilight.css'>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Windows NT Button -->
+    <link rel="stylesheet" href="css/Windows_95_Btn.css">
+
+    <!-- Help Modal -->
+    <link rel="stylesheet" href="css/bymyself_helpModalMINI.css">
+    <link rel="stylesheet" href="css/bymyself_helpButton.css">
+
+    <!-- VHS Clock -->
+    <script src="js/VHSclock.js"></script>
+    <link rel="stylesheet" href="css/bymyself_VHSclock.css">
+
+    <!-- Jcubic Terminal --> 
+    <link rel="stylesheet" href="css/jquery.terminal.css">
+<style>
+/* #region --------------Editor--------------  */
+  .wrapper {
+      margin: 10px;
+      width: 635px;
+      height: calc((var(--height, 695) - 120) * 1px);
+      background-color: rgba(	222, 205, 245, 0.9);
+      background-image: unset;
+      border-radius: 6px;
+  }
+  body {
+
+      background-color: black;
+      background-image: unset;
+      background-size: cover;
+      max-height: 100%;
+      max-width: 100%;
+      overflow: visible;
+  }
+  html{
+
+      background: transparent;
+      max-height: 100%;
+      max-width: 100%;
+      overflow: visible;
+  }
+  .box {
+      margin: 0px;
+      width: 715px;
+      height: calc(var(--height, 695) * 1px);
+      border-radius: 5px;
+  }
+  .CodeMirror {
+    height: auto;
+  }
+/* #endregion --------------------------------------  */
+/* #region --------------Quake Terminal--------------  */
+
+    .terminal {
+      --size: 1.5;
+      --link-color: #1B998B;
+      --error-color: #DECDF5	;
+      --background: #DECDF5;
+      z-index: 67
+      --color: red;
+
+    }
+    /* Terminal when it's popped */
+    .td {
+      z-index: 600;
+      width: 75%;
+      margin-left: 25%;
+      color: red;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 
+      0 1px 2px #fff, /*bottom external highlight*/
+      0 -1px 1px #666, /*top external shadow*/ 
+      inset 0 -1px 1px rgba(0,0,0,0.5), /*bottom internal shadow*/ 
+      inset 0 1px 1px rgba(255,255,255,0.8); /*top internal highlight*/
+    }
+
+/* #endregion --------------------------------------  */
+/* #region --------------Video Grid--------------  */
+  .row_items {
+      border-width: 4px;
+      margin-top: -4px;
+      margin-left: -4px;
+      padding: 12px;
+      border-radius: 2px;
+      box-sizing: border-box;
+      width: calc(49.5% + 2px);
+      background-clip: border-box;
+      background-image: url("pictures/starsbg.jpg");
+      background-blend-mode: color;
+    }
+
+    .row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding-top: 1px;
+      padding-left: 1px;
+      height: calc(55% + 6px);
+      box-sizing: border-box;
+      margin: auto;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0);
+      background: transparent;
+    }
+
+    .grid {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      min-height: 130%;
+    }
+/* #endregion --------------------------------------  */
+/* #region --------------Stretched Vid BG--------------  */
+
+  .stretchedvidWrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    height: 99%;
+    width: 99%;
+    background: transparent;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+  }
+  .stretchedvidWrapper video {
+    height: 110%;
+    width: 110%;
+    object-fit: cover;
+    display: block;
+    position:absolute;
+  }
+
+/* #endregion --------------------------------------  */
+/* #region --------------Editor Components--------------  */
+
+  .download {
+  	box-shadow:inset 0px -2px 6px 0px rgba(7	54	66, 0.67);;
+  	background:linear-gradient(to bottom,rgba(7,54,66, 0.7) 5%, rgba(0,43,54, .9) 100%);
+  	background-color:rgba(0,43,54, 0.48);;
+  	border-radius:3px;
+  	border:1px solid #0b0e07;
+  	cursor:pointer;
+  	color:#ffffff;
+  	font-family:Arial;
+  	font-size:12px;
+  	padding:5px 7px;
+  	text-decoration:none;
+  	text-shadow:0px 1px 0px #263666;
+      margin-left: 74%;
+  }
+  .download:hover {
+  	background:linear-gradient(to bottom, #0688fa 5%, #2dabf9 100%);
+  	background-color:#0688fa;
+  }
+  .download:active {
+  	position:relative;
+  	top:1px;
+  }
+  .wrapper, .cm-dialog, .cm-shadow-box, .box {
+      overflow: hidden;
+      position: absolute;
+      top: 54%;
+      left: 50%;
+      transform: translate(-50%, -54%);
+  }
+  .cm-dialog {
+      width: 96.2%;
+      height: 93.7%;
+      border-radius: 5px;
+      box-shadow: rgba(0, 0, 0, 0.8) 0px 20px 68px;
+      --background: #656176;
+      background: var(--background, white);
+      z-index: 100;
+      opacity: .99;
+      background-size: contain;
+      background-repeat: repeat;   
+  }
+  .cm-dialog header {
+      padding: 10px;
+      -webkit-margin-collapse: discard;
+      background-size: contain;
+      background-repeat: repeat;
+  }
+  .cm-dialog .cm-body {
+      height: calc(100% - 38px);
+      background-size: contain;
+      background-repeat: repeat;  
+  }
+  .cm-dialog .CodeMirror {
+      background: var(--background, white);
+      line-height: 1.4em;
+      height: 100%;
+      background-size: cover; 
+  }
+  .cm-dialog .cm-s-seti .CodeMirror-gutters {
+      background-color: var(--background, white);
+  }
+  .cm-icons {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+  }
+  .cm-icons li {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background: red;
+      border-radius: 50%;
+  }
+  .cm-icons li:first-child {
+      background: #FF5F56;
+  }
+  .cm-icons li:nth-child(2) {
+      background: #FFBD2E;
+  }
+  .cm-icons li:last-child {
+      background: #27C93F;
+  }
+
+  .note a, .note a:visited {
+      color: #005DB6;
+      text-decoration: none;
+  }
+  .note a:hover {
+      text-decoration: underline;
+  }
+  /* #endregion --------------------------------------  */
+</style>
+<body>
+<!--#region ----------  ------Body  ---------------- -->
+    
+ <div class="clockContainer">
+ <h3 id="VHSclockTime" class="VHSclock glitch"></h3>
+ <h3 id="VHSclockDay" class="VHSclockBot glitch"></h3>
+ <h3 id="VHSclockGlow" class="glow"></h3>
+ </div>
+
+    <!-- Tutorial Modal -->
+    <div id="tutorialModal-btn">
+      <img class="tutorialIcon" src="pictures/xp-paint.png">
+      <img class="tutorialIcon" src="pictures/mickey-pointer.png">
+    </div>
+  
+
+  <div class="formpop" id="info_modal">
+    <div class="buttonRow">
+      <button class="windowsBtn" id="popbtn" onclick="collapse_modal()">Next</button>
+      <button class="windowsBtn" id="popbtn" onclick="collapse_modal()">Close</button>
+      <img class="icon1" src="pictures/bymyself-icon.png"></img>
+    </div>
+      <p class="formpop_content"> start by opening the shell with the ~ key </p>
+  </div> 
+
+    <!-- Stretched Video BG -->
+    <div class="stretchedvidWrapper">
+        <video autoplay muted loop id="vidTag" >
+            <source id="videoBG" src="pictures/animeloops.mkv" type="video/mp4">
+                <!-- videos/movieLoops/1 (37).mp4 -->
+            </source>
+        </video>
+
+    <!-- Editor -->
+    <div id="theBox" class="box" style="opacity: .01">
+
+        <div class="wrapper" id="editorWrapper">
+            <div class="cm-dialog">
+                <header id="theHeader" style="background-size: cover; background-repeat: no repeat; background-position: center">
+                    <ul class="cm-icons">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                            <button class="download" id="screenshotButton">Screenshot</button>
+                    </ul>
+                </header>
+                <div  class="cm-body"></div>
+            </div>
+        </div>
+    </div>
+    <template id="tmpl">
+  <!-- Random Pre Loaded Text -->
+        <pre1>
+            
+          
+            PRESS THE ~ KEY
+
+            [color] [bg] [help]
+
+
+            
+
+
+
+            10 PRINT CHR$(205.5+RND(1)); : GOTO 10
+
+            : ( ) { : | : & } ; : 
+        </pre1>
+        <pre2 style="display:none">
+          PRESS THE ~ KEY
+
+        send(to, from, count)
+        register short *to, *from;
+        register count;
+        {
+            register n = (count + 7) / 8;
+            switch (count % 8) {
+            case 0: do { *to = *from++;
+            case 7: *to = *from++;
+            case 6: *to = *from++;
+            case 5: *to = *from++;
+            case 4: *to = *from++;
+            case 3: *to = *from++;
+            case 2: *to = *from++;
+            case 1: *to = *from++;
+        } while (--n > 0);
+        }
+        }
+        </pre2>
+        <pre3 style="display:none">
+          PRESS THE ~ KEY
+
+        WHENEVER A(1).E.FENCE.OR.A(2).E.FENCE.OR.A(3).E.FENCE
+        PRFULL.($'R'1INSTRUCTIONS:$)
+        PRFULL.($ '4MAIL NAME1 NAME2 PROB1 PROG1 PROB2 PROG2 ...$)
+        PRFULL.($ WHERE '=NAME1 NAME2'= IS THE FILE TO BE MAILED,$)
+        PRFULL.($ AND '=PROBN PROGN'= ARE DIRECTORIES TO WHICH '8$,
+        1  $IT IS TO BE SENT.'B$)
+        CHNCOM.(0)
+        END OF CONDITIONAL
+        </pre3>
+
+        <pre4 style="display:none">
+          PRESS THE ~ KEY
+
+        OCT77770  OCT  77770    # DONT MOVE
+        CA  V37FLBIT  # IS AVERAGE G ON
+        MASK  FLAGWRD7
+        CCS  A
+        TC  WHIMPER -1  # YES.  DONT DO POODOO.  DO BAILOUT.
+
+        TC  DOWNFLAG
+        ADRES  STATEFLG
+
+        TC  DOWNFLAG
+        ADRES  REINTFLG
+
+        TC  DOWNFLAG
+        ADRES  NODOFLAG
+
+        TC  BANKCALL
+        CADR  MR.KLEAN
+        TC  WHIMPER
+        </pre4>
+        <pre5 style="display:none">
+
+          PRESS THE ~ KEY
+
+        
+
+
+        - return floor(value)
+        + return round(value)
+
+
+
+
+
+
+
+        </pre5>
+          <pre6 style="display:none">
+
+            PRESS THE ~ KEY
+
+        checkother()          /* 0x57d0 */
+        {
+            int s, l8, l12, l16, optval;
+            struct sockaddr_in sin;      /* 16 bytes */
+            
+            optval = 1;
+            if ((random() % 7) == 3)
+              return;          /* 612 */
+            
+            s = socket(AF_INET, SOCK_STREAM, 0);
+            if (s < 0)
+              return;
+        </pre6>
+        <pre7 style="display:none">
+          PRESS THE ~ KEY
+
+          MakeImage(dsp, data, width, height, depth, img_info, clip)
+            Display *dsp;
+            unsigned char *data;
+            int width, height;
+            int depth;
+            ImageInfo *img_info;
+            int clip;
+          {
+            int linepad, shiftnum;
+            int shiftstart, shiftstop, shiftinc;
+            int bytesperline,bpp;
+            int temp;
+            int w, h;
+            XImage *newimage;
+            unsigned char *bit_data, *bitp, *datap;
+            Visual *theVisual;
+            int bmap_order;
+            unsigned long c;
+            int rshift, gshift, bshift;
+
+          #ifdef NEW
+            switch(bpp=bits_per_pixel(dsp,depth))
+          #else
+            switch(depth)
+        </pre7>
+        <pre8 style="display:none">
+
+          PRESS THE ~ KEY
+
+
+            sub AsLink {
+             local($num) = (@_);
+             local($ref) = $old{"r$num"};
+             defined $ref
+                  ? ($ref =~ /\.(?:gif|jpg|jpeg|png)$/i 
+                      ? "img src=\"$ref\"" 
+                      : "a href=\"$ref\"[$num]<\/a>")
+                  : "[$num]";
+          }
+
+        </pre8>
+        <pre9 style="display:none">
+
+          PRESS THE ~ KEY
+
+
+        import numpy as np
+
+        def pagerank(M, num_iterations=100, d=0.85):
+            N = M.shape[1]
+            v = np.random.rand(N, 1)
+            v = v / np.linalg.norm(v, 1)
+            iteration = 0
+            while iteration < num_iterations:
+                iteration += 1
+                v = d * np.matmul(M, v) + (1 - d) / N
+            return v
+
+        </pre9>
+        <pre10 style="display:none">
+
+          PRESS THE ~ KEY
+
+
+
+
+        (define-behavior (bounce
+                :start-when (or (bump?)
+                              bounce-trigger? )
+                :abort-when (bump-edge?)
+                :onetime? t
+              )
+        )
+
+
+
+        </pre10>
+        <pre11 style="display:none">
+
+          PRESS THE ~ KEY
+          
+
+
+        [~, b_user] = max(drc(i, :)/_avg_thruput(i, :));
+        avg_thruput(i+1, :) = (i/(i+1))*avg_thruput(i, :);
+        avg_thruput(i+1, b_user) = (i/(i+1))*avg_thruput(i, b_user)+drc(i, b_user)/(i+1);
+
+
+
+
+        </pre11>
+        <pre12 style="display:none">
+
+          PRESS THE ~ KEY
+          
+
+          double AttackerSuccessProbability(double q, int z)
+          {
+              double p = 1.0 - q;
+              double lambda = z * (q / p);
+              double sum = 1.0;
+              int i, k;
+              for (k = 0; k <= z; k++)
+              {
+                  double poisson = exp(-lambda);
+                  for (i = 1; i <= k; i++)
+                      poisson *= lambda / i;
+                  sum -= poisson * (1 - pow(q / p, z - k));
+              }
+              return sum;
+          }
+
+
+        </pre12>
+        <pre13 style="display:none">
+
+          PRESS THE ~ KEY
+          
+
+        ; BOOL __cdecl HasUkrainianLocale()
+                        push    ebx
+                        mov     ebx, ds:GetKeyboardLayoutList
+                        push    ebp
+                        push    esi
+                        xor     ebp, ebp
+                        push    ebp
+                        push    ebp
+                        call    ebx
+                        mov     esi, eax
+                        cmp     esi, ebp
+                        jz      short loc_37680A
+
+
+
+        </pre13>
+        <pre14 style="display:none">
+
+          PRESS THE ~ KEY
+
+
+        {"__typename":"PageLikeAction","action_type": \
+        "LIKE","label":{"text":"Like"}
+
+
+
+
+
+
+
+
+
+
+        </pre14>
+        <pre15 style="display:none">
+
+          PRESS THE ~ KEY
+
+
+        Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+
+
+
+
+
+
+
+
+
+        </pre15>
+        <pre16 style="display:none">
+
+          PRESS THE ~ KEY
+
+
+          buffer = OPENSSL_malloc(1 + 2 + payload + padding);
+          bp = buffer;
+           
+          /* Enter response type, length and copy payload */
+          *bp++ = TLS1_HB_RESPONSE;
+          s2n(payload, bp);
+          memcpy(bp, pl, payload);
+          bp += payload;
+          /* Random padding */
+          RAND_pseudo_bytes(bp, padding);
+
+
+        </pre16>
+        <pre17 style="display:none">
+
+          PRESS THE ~ KEY
+
+          float Q_rsqrt( float number ) 
+          { 
+            long i; 
+            float x2, y; 
+            const float threehalfs = 1.5F; 
+            x2 = number * 0.5F; 
+            y  = number; 
+            i  = * ( long * ) &y;                       // evil floating point bit level hacking 
+            i  = 0x5f3759df - ( i >> 1 );               // what the fuck?  
+            y  = * ( float * ) &i; 
+            y  = y * ( threehalfs - ( x2 * y * y ) );   // 1st iteration 
+          //  y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed 
+            return y; 
+          } 
+        </pre17>
+  <!-- End Pre -->
+
+    </template>
+    <!-- Quake Terminal -->
+    <div id="term" class="term" style="z-index:1000">
+    </div>
+    </div>
+    </div>
+    <!-- Video Grid 
+    <div class="grid">
+        <div class="row">
+            <video class="row_items" autplay muted loop style="align-self: flex-start;" id="video_one">
+                <source src="Downloaders\video\megashots.mp4#t=840" type="video/mp4">
+            </video>
+            <video class="row_items" autplay muted loop style="align-self: flex-end;" id="video_two">
+                <source src="Downloaders\video\MegaAnime.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="row">
+            <video class="row_items" autplay muted loop style="align-self: flex-start; margin-top: 6px;"
+                id="video_three">
+                <source src="Downloaders\video\megashots2.mp4" type="video/mp4">
+            </video>
+            <video loop autplay muted class="row_items" style="align-self: flex-end;" id="video_four">
+                <source src="Downloaders\video\megashots.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div> 
+    -->
+    <!-- Editor Scripts -->
+    <script src='https://cdn.jsdelivr.net/npm/html2canvas'></script>
+    <script src='https://cdn.jsdelivr.net/npm/codemirror@5.58.3/lib/codemirror.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/codemirror@5.58.3/mode/javascript/javascript.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/codemirror@5.58.3/addon/edit/matchbrackets.js'></script>
+    <script src='https://cdn.jsdelivr.net/gh/jcubic/lips@devel/lib/js/codemirror.js'></script>
+<!--#endregion --------------------------------------->
+<script>
+// #region                Tutorial Modal
+//-------------------------------------------------------------------------- 
+
+  let tutorialBtn = document.getElementById('tutorialModal-btn');
+  tutorialBtn.onclick = function() {
+        $('.formpop').css("display", "flex")
+      }
+
+  function collapse_modal(element) {
+      document.getElementById("info_modal").style.display = "none";
+    }        
+      
+// #endregion --------------------------------------------------------------
+// #region                Global Variables
+//-------------------------------------------------------------------------- 
+  // Frame Selection Possible Args
+  var play1 = [1, "one", "first", "top left", "top", "left"]
+  var play2 = [2, "two", "second", "top right", "top", "right"]
+  var play3 = [3, "three", "third", "bottom left", "bottom", "left"]
+  var play4 = [4, "four", "fourth", "bottom right", "bottom", "right"]
+  var playtop = ["1row", "row1", "onerow", "firstrow", "top", "toprow"]
+  var playbot = ["2row", "tworow", "secondrow", "bottom", "bot"]
+  var playright = ["right", "rightcolumn", "column2", "columntwo"]
+  var playleft = ["left", "left2", "leftcolumn", "column1", "columnone"]
+  var playall = [4, "allfour", "every", "everyone", "total", "all", "both", "complete"]
+  dictionaryList = [play1, play2, play3, play4, playtop, playbot, playright, playleft, playall] 
+  var mute1 = [1, "one", "first", "top left", "top", "all", "left", "left column", "top row", "everything", "al"]
+  var mute2 = [2, "two", "second", "top right", "top", "all", "right", "right column", "top row", "everything", "al"]
+  var mute3 = [3, "three", "third", "bottom left", "bottom", "all", "left", "left column", "bottomrow", "everything", "al"]
+  var mute4 = [4, "four", "fourth", "bottom right", "bottom", "all", "right", "right column", "bottomrow", "everything", "al"]
+  muteDictionary_list = [mute1, mute2, mute3, mute4]
+
+  // Frame Sources
+  videoList = [document.getElementById("video_one"), document.getElementById("video_two"), document.getElementById("video_three"), document.getElementById("video_four")]
+
+// #region                Media Cusomizer Global Functions
+//-------------------------------------------------------------------------- 
+
+  class directory {
+    constructor(name, fileCount1, fileType1, fileCount2, fileType2, fileCount3, fileType3,) {
+      this.name = name;
+      this.fileCount1 = fileCount1;
+      this.fileType1 = fileType1;
+      this.fileCount2 = fileCount2;
+      this.fileType2 = fileType2;
+      this.fileCount3 = fileCount3;
+      this.fileType3 = fileType3;
+    }
+  }
+
+  // Get Media Directory Details
+  function getDirectory(dir) {
+    let allPics = new directory("allPics", 644, "jpg", 26, "png", 1, "gif")
+    if (dir == "allPics") { return allPics}
+  }
+
+  // Get Random File from Directory
+  function randomFile(input) {
+    let source = getDirectory(input)
+    let dirRange = source.fileCount1 + source.fileCount2 + source.fileCount3 
+    let rIndex = Math.floor((Math.random() * dirRange) + 1);
+    fileCode = (rIndex <= source.fileCount1) ? source.fileType1 : (rIndex > source.fileCount2) ? source.fileType2 : source.fileType3
+    rIndex = (rIndex <= source.fileCount1) ? rIndex : (rIndex > source.fileCount2 + source.fileCount1) ? (rIndex - (source.fileCount1 + source.fileCount2)) : (rIndex - source.fileCount1)
+    return "(" + rIndex + "\\)." + fileCode + "\)"
+  }
+
+  // Random Pic Setter -> add any arg when changing pics other than the main bg
+  function randomPic(input) {
+    if ( input == undefined ) {
+      $(document.body).css("background-image", "unset");
+      $("video").css("display", "none");
+
+    }
+    $(document.body).css("background-color", "black");
+    return randomFile("allPics")
+  }
+
+  // Vid Initializer
+  function vidInit(rVid) {
+    $(document.body).css("background-image", "unset");
+    $(document.body).css("background-color", "black");
+    $("video").css("display", "block");
+    var video1 = document.getElementById('vidTag');
+    var source = document.createElement('source');
+    $("#videoBG").attr("src", rVid)
+    video1.appendChild(source);
+    video1.play();
+    setTimeout(function () {
+        video1.pause();
+        $("#videoBG").attr("src", rVid)
+        video1.load();
+        video1.play();
+        random_rgba();
+        $("video").css("display", "block");
+    }, 2000);
+  }
+// #region                Color Cusomizer Global Functions
+//-------------------------------------------------------------------------- 
+
+ function rColor(alphaValue) {
+    alphaValue = alphaValue || (Math.random() * 1).toPrecision(2)
+    return tinycolor.random().setAlpha(alphaValue).toRgbString() }
+
+ function randomReadable(bgColor) {
+    colorIter = rColor(1)
+    for (let i = 0; i < 100; i++) {
+     if ( tinycolor.isReadable(colorIter, bgColor, {level: "AAA"}) == false ) {
+      colorIter = rColor(1)} else { return colorIter } }
+    return tinycolor.mostReadable(bgColor, ["FF09CE", "FFFFFF", "000000", "424343", "361D2E", "2BFFD1", "4FE5FF", "FF5A4B"]).toHexString()}
+
+ function randomComplement(bgColor, partner) {
+    colorIter = tinycolor(partner).complement().toString()
+    for (let i = 0; i < 100; i++) {
+     if ( tinycolor.isReadable(colorIter, bgColor, {level: "AAA"}) == false ) {
+      // Spin 5 degrees on color wheel until complement is readable on bg color
+      colorIter = tinycolor(colorIter).spin(5).toString()} else { return colorIter } }
+    return tinycolor.mostReadable(bgColor, ["FF09CE", "FFFFFF", "000000", "424343", "361D2E", "2BFFD1", "4FE5FF", "FF5A4B"]).toHexString()}
+
+// #region                Input Forgiveness
+//-------------------------------------------------------------------------- 
+
+  function hasWord(command, word) {
+    word = word.toString(); 
+    command = command.toString();
+    substrLength = Math.round(command.length * .85);
+    subStr = command.substring(1, substrLength);
+    if ( word.includes(subStr) == true ) {
+      return true
+    }
+    return false
+  }
+
+// #region                Help Screen Dialogues
+//-------------------------------------------------------------------------- 
+
+  var colorHelp = ["[scheme]  [colorbg]  [colortext]",  "[colorheader]  [colorborder]",  "[colordialog]  [colorwindow]", "[bg] to customize page background", "[hpic] or [wpic] for inline pics"]
+// #endregion --------------------------------------------------------------
+// #region                Editor
+//-------------------------------------------------------------------------- 
+
+  function fadeIn() {
+      $('#theBox').animate({opacity: 1},5200);
+      $('.tutorialIcon').animate({opacity: .02},5200);
+
+  }
+  // Color Config
+  $(document).ready(function () {
+    //Animation on Load
+    setTimeout(fadeIn(), 87000)
+    // Turn VHS Clock On
+    showTime();
+    // Colors Content
+    $('.cm-dialog .CodeMirror').css("background", "rgba(83, 77, 86, 1)")
+    $('#editorWrapper').css("background-color", "rgba(222, 205, 245, .77)")
+    $('.CodeMirror-linenumber').css("background-color", "rgba(83, 77, 86, .9)")
+    $('.CodeMirror-linenumbers').css("background-color", "rgba(83, 77, 86, .9)")
+    $('.CodeMirror-gutters').css("border-right-color", "rgba(80, 74, 83, .83)")
+    $('.CodeMirror-gutters').css("background-color", "rgba(80, 74, 83, .83)")
+    $('.CodeMirror-gutter').css("background-color", "rgba(80, 74, 83, .83)")
+    $('.CodeMirror-gutter-elt').css("background-color", "rgba(80, 74, 83, .83)")
+    $('.cm-icons').css("background-color", "rgba(106, 104, 117, .9)")
+    $('#theHeader').css("background-color", "rgba(106, 104, 117, .9)")
+    // Colors Text
+    $('.cm-number').css("color", "rgba(37, 210, 190, 1)")
+    $('.cm-variable').css("color", "rgba(248, 241, 255, 1)")
+    $('.cm-bracket').css("color", "rgba(198, 162, 246, 1)")
+    $('.cm-comment').css("color", "rgba(10, 17, 40, .94)")
+    $('.cm-builtin').css("color", "rgba(11, 79, 108, 1)")
+    // Colors Download Button
+    $('.download:hover').css("background-color", "rgba(27, 153, 139, 1)")      
+    $('.download:hover').css("background", "rgba(27, 153, 139, 1)")
+    $('.download').css("background-color", "rgba(83, 77, 86, .6)")      
+    $('.download').css("box-shadow", "unset")            
+    $('.download').css("background", "rgba(83, 77, 86, .6)")            
+    $('.download').css("color", "rgba(248, 241, 255, 1)")            
+    $('.download').css("border", "rgba(27, 153, 139, 1)")
+  });
+
+  function getpreCode(element) {
+     return "pre" + Math.floor((Math.random() * 17) * 1); }
+
+  const code = tmpl.content.querySelector(getpreCode()).innerText;
+  const box = document.querySelector('.box');
+  const dialog = document.querySelector('.cm-body');
+
+  var myCodeMirror = CodeMirror(dialog, {
+      value: code,
+      mode:  "javascript",
+      viewportMargin: 40,
+      lineWrapping: true,
+      lineNumbers: true,
+      matchBrackets: true,
+      theme: 'twilight',
+      inputStyle: "contenteditable"
+  });
+
+  function download(url) {
+      var a = document.createElement('a');
+      a.download = 'screenshot.png';
+      a.href = url;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+  }
+
+  /* Downloader */
+  var button = document.getElementById("screenshotButton");
+  button.addEventListener('click', () => {
+      $('#editorWrapper').css("border-radius", "initial")
+      $('.download').css("display", "none")
+      const node = document.querySelector(".wrapper");
+      html2canvas(node, {
+          scale: window.devicePixelRatio
+      }).then(canvas => {
+          //document.body.appendChild(canvas);
+          var url = canvas.toDataURL("image/png");
+          download(url);
+          $('#editorWrapper').css("border-radius", "6px")
+          $('.download').css("display", "inline-block")
+
+      });
+  });
+
+  // Auto Resizer 
+  let height;
+  const body = document.body;
+  myCodeMirror.on('change', function() {
+      var rect = dialog.getBoundingClientRect();
+      var lineCount = $('.CodeMirror-code div').length
+      if ( parseInt($('#editorWrapper').css("height")) < (parseInt($('html').css("height"))* .82) ) {
+        if (height !== rect.height &&  lineCount == 75) {
+            height = rect.height;
+            body.style.setProperty('--height', rect.height * 1.5);
+        }
+        if (height !== rect.height &&  lineCount == 100) {
+            height = rect.height;
+            body.style.setProperty('--height', rect.height * 1.5);
+        }
+        if (height !== rect.height &&  lineCount == 120) {
+            height = rect.height;
+            body.style.setProperty('--height', rect.height * 1.5);
+        }
+        if (height !== rect.height &&  lineCount == 150) {
+            height = rect.height;
+            body.style.setProperty('--height', rect.height * 1.5);
+            $('#editorWrapper').css("width", "690px");
+        }
+    }
+  });
+
+  /* Old Resizer 
+  myCodeMirror.on('change', function() {
+      var codeHeight = $('#editorWrapper').height;
+      var boxHeight = $('.box').height();
+      if ( dialog.getBoundingClientRect().height > 20 ) {
+        $('cm-dialog').css("height", "auto");
+        $('.cm-dialog .cm-body').css("height", "auto");
+        $('.cm-dialog .CodeMirror').css("height", "auto");
+      }
+      }); */
+// #endregion --------------------------------------------------------------
+// #region                Quake Input Correction
+//-------------------------------------------------------------------------- 
+  String.prototype.strip = function (char) {
+      return this.replace(new RegExp("^" + char + "*"), '').
+        replace(new RegExp(char + "*$"), '');
+    }
+
+    $.extend_if_has = function (desc, source, array) {
+      for (var i = array.length; i--;) {
+        if (typeof source[array[i]] != 'undefined') {
+          desc[array[i]] = source[array[i]];
+        }
+      }
+      return desc;
+    };
+// #endregion --------------------------------------------------------------
+// #region                Quake Term
+//--------------------------------------------------------------------------  
+
+  (function ($) {
+      $.fn.term = function (eval, options) {
+        if ($('body').data('term')) {
+          return $('body').data('term').terminal;
+        }
+        this.addClass('term');
+        options = options || {};
+        eval = eval || function (command, term) {
+          term.echo("you don't set eval for term");
+        };
+        this.hide();
+        var settings = {
+
+          // SETTINGS Property of Terminal  \\           
+          prompt: ' $ ',
+          name: 'term',
+          height: 320,
+          enabled: false,
+          greetings: "[bg] [colors] [resize] [wpic] [hpic]\n[language] to choose coding language\n[tools] for programming tools like diff or run\n[videos] [games] [controls] [more-editors]\n[help]",
+          checkArity: false,
+          history: true,
+          memory: true,
+          keypress: function (e) {
+            if (e.which == 96) {
+              return false;
+            }
+          }
+        };
+        if (options) {
+          $.extend(settings, options);
+        }
+        this.append('<div class="td"></div>');
+        var self = this;
+        self.terminal = this.find('.td').terminal(eval, settings);
+        var focus = false;
+
+        // Quake Functionality 
+        $(document.documentElement).keypress(function (e) {
+          if (e.which == 96) {
+            self.slideToggle('fast');
+            self.terminal.focus(focus = !focus);
+            self.terminal.attr({
+              scrollTop: self.terminal.attr("scrollHeight")
+            });
+            
+          }
+        });
+        $('body').data('term', this);
+        return self;
+      };
+    }) (jQuery);
+// #endregion --------------------------------------------------------------
+// #region                Global Control Hotkeys 
+//--------------------------------------------------------------------------  
+     
+      // Binding Tilde ~ Key to play/pause all videos
+      // Tilde keycode = 192
+      /* Add other hotkeys?
+        $(document).keydown(function (e) {
+          if (e.which == 192) {
+            for (const i of videoList) {
+              if (i.paused == true) {
+                i.play();
+              } else {
+                i.pause();
+              }
+            };
+          };
+
+          // Spacebar pauses/plays when term is hidden
+          if (e.which == 32 ) {
+            if (jQuery("#term").css('display') == 'none') {
+              for (const i of videoList) {
+                if (i.paused == true) {
+                i.play();
+                } else {
+                i.pause();
+              }
+            };
+          };
+        }
+        });
+  */
+  $(function () {
+    $('#term').term({
+// #endregion --------------------------------------------------------------
+// #region                [WATCH] Navigate to Other Videos 
+//--------------------------------------------------------------------------  
+      watch: function (video) {
+        var mega4x4 = ["4x4megashots", "4x4", "4x4loopgrid", "4x4grid", "loopgrid", "megagrid", "megashotsgrid", "mega4x4", "4by4", "loopgrid4x4"]
+        var anime4x4 = ["4x4anime", "anime4x4", "animeloopgrid", "animegrid", "loopgridanime", "animemegagrid", "megashotsgridanime", "megaanime4x4", "anime4by4", "animeloopgrid4x4"]
+        var megashots = ["megashots", "singleframemega", "megasingle", "megaloopsing", "greatestshots", "megashotsplayer", "megashotsfullscreen", "moviemontage", "greatestshots", "holymindloop"]
+        var mega6x6 = ["bigmegashots", "6x6", "6x6player", "oversizedplayer", "megaloopgrid6", "loopgrid6x6", "6by6", "6framesshots", "6x6shots", "6shots"]
+        var mega_with_anime = ["megawithanime", "4x4withanime", "4x4loopwithanime", "normal4x4plusanime", "includinganime", "loopgride1anime", "loopgridoneanime", "originalmegagrid", "gridplusanime", "loopgridwithanime"]
+        var random_video = ["randomvideo", "randomloop", "1x1random", "playlistplayer", "shufflevideos", "randomvideos", "playlistrandom", "shotsrandom", "shuffleshots", "randomplaylistplayer"]
+        if (mega4x4.includes(video) == true) {
+          window.location = "4x4_LoopGrid.html";
+        }
+        else if (anime4x4.includes(video) == true) {
+          window.location = "4x4_Anime.html";
+        }
+        else if (megashots.includes(video) == true) {
+          window.location = "1x1_MegaShots.html";
+        }
+        else if (mega6x6.includes(video) == true) {
+          window.location = "6x6_LoopGrid.html";
+        }
+        else if (mega_with_anime.includes(video) == true) {
+          window.location = "4x4_with_anime.html";
+        }
+        else if (random_video.includes(video) == true) {
+          window.location = "1x1_Random_Video.html";
+        }
+      },
+// #endregion --------------------------------------------------------------
+// #region                [MUTE] [VOLUME] 
+//--------------------------------------------------------------------------
+      mute: function (input) {
+        input = input || "fourth"
+        for (const x of muteDictionary_list) {
+          if (x.includes(input)) {
+            var frameIndex = muteDictionary_list.indexOf(x);
+          }
+        }
+        if (frameIndex == undefined) {
+          this.echo('\nUse the "mute" command by indicating the frame you want to play/pause -- \nusing numbers, rows, columns, all, left, right, first, second, etc. to indicate frame\nE.g., "mute top" or "mute third"\n')
+        }
+        else {
+          if (videoList[frameIndex].volume == 0 ) {
+            videoList[frameIndex].volume = 1.0;
+          } else {
+            videoList[frameIndex].volume = 0;
+          };
+        }
+      },
+      volume: function (input) {
+        input = input || "fourth"
+        for (const x of muteDictionary_list) {
+          if (x.includes(input)) {
+            var frameIndex = muteDictionary_list.indexOf(x);
+          }
+        }
+        if (frameIndex == undefined) {
+          this.echo('\nUse the "mute" command by indicating the frame you want to play/pause -- \nusing numbers, rows, columns, all, left, right, first, second, etc. to indicate frame\nE.g., "mute top" or "mute third"\n')
+        }
+        else {
+          if (videoList[frameIndex].volume == 0) {
+            videoList[frameIndex].volume = 1.0;
+          } else {
+            videoList[frameIndex].volume = 0;
+          };
+        }
+      },
+// #endregion --------------------------------------------------------------
+// #region                [PLAY] [PAUSE]
+//--------------------------------------------------------------------------
+      play: function (input) {
+        input = input || "all"
+        for (const x of dictionaryList) {
+          if (x.includes(input)) {
+            var frameIndex = dictionaryList.indexOf(x);
+          }
+        }
+        if (frameIndex == undefined) {
+          this.echo('\nUse the "play" command by indicating the frame you want to play/pause -- \nusing numbers, rows, columns, all, left, right, first, second, etc. to indicate frame\nE.g., "play toprow" or "play first"\n')
+        }
+        else {
+          for (const i of inputMatch[frameIndex]) {
+            if (videoList[i].paused == true) {
+              videoList[i].play();
+            } else {
+              videoList[i].pause();
+            }
+          };
+        }
+      },
+      pause: function (input) {
+        input = input || "all"
+        for (const x of dictionaryList) {
+          if (x.includes(input)) {
+            var frameIndex = dictionaryList.indexOf(x);
+          }
+        }
+        if (frameIndex == undefined) {
+          this.echo('\nUse the "play" command by indicating the frame you want to play/pause -- \nusing numbers, rows, columns, all, left, right, first, second, etc. to indicate frame\nE.g., "play toprow" or "play first"\n')
+        }
+        else {
+          for (const i of inputMatch[frameIndex]) {
+            if (videoList[i].paused == true) {
+              videoList[i].play();
+            } else {
+              videoList[i].pause();
+            }
+          };
+        }
+      },
+// #endregion --------------------------------------------------------------
+// #region                Background Selector
+//--------------------------------------------------------------------------  
+
+        // Random BG Pic
+        bgp: function () {
+          newPic = "url\(pictures/pic\\ \\" + randomPic()
+          $('.stretchedvidWrapper').css("background-image", newPic);
+        },
+
+        // Random BG Vid
+        bgv: function () {
+            ran = Math.floor((Math.random() * 4) + 1);
+            if (ran == 1 || ran == 2) {
+                rIndex = Math.floor((Math.random() * 27) + 1);
+                rVid = "video/animeLoops/1 (" + rIndex + ").mkv";
+            };
+            if (ran == 3) {
+                rIndex = Math.floor((Math.random() * 40) + 1);
+                rVid = "video/movieLoops/1 (" + rIndex + ").mp4";
+            };
+            if (ran == 4) {
+                rIndex = Math.floor((Math.random() * 20) + 1);
+                rVid = "video/Apple/1(" + rIndex + ").mov";
+            };
+            vidInit(rVid)
+        },
+
+        // Manual BG Selection
+        bg: function () {
+            this.clear()
+            this.echo("[[gb;#04724d;]What type of background do you want?]\n")
+            this.echo("[video] [pic]")
+            this.push(function (response) {
+                // ------  Video  ------ \\               
+                if ( hasWord("video", response) == true ) {
+                    this.clear()
+                    this.echo("[aerial] for AppleTV areial screensavers\n[movie] for Greatst Movie Shots Montage\n[loops] for Iconic Cinema loops\n[lofi] for Aesthetic Anime Loops\n[anime] for relaxing anime visuals\n[random] for Random\n[4x4] for 4 videos at once")
+                    this.push(function (videoChoice) {
+                        // ------  Aerial  ------ \\               
+                        if ( hasWord("aerial", videoChoice) == true ) {
+                            rIndex = Math.floor((Math.random() * 20) + 1);
+                            rVid = "videos/apple-aerial/1(" + rIndex + ").mov";
+                        }
+                        if ( hasWord("lofi", videoChoice) == true ) {
+                            rIndex = Math.floor((Math.random() * 27) + 1);
+                            rVid = "videos/anime-loops/1 (" + rIndex + ").mkv";
+                        }
+                        if ( hasWord("movie", videoChoice) == true ) {
+                            rVid = "videos/megashots.mp4";
+                        }
+                        if ( hasWord("random", videoChoice) == true ) {
+                            rVid = "videos/megashots.mp4";
+                        }
+                        if ( hasWord("loops", videoChoice) == true ) {
+                            rIndex = Math.floor((Math.random() * 40) + 1);
+                            rVid = "videos/loops/1 (" + rIndex + ").mp4";
+                        }
+                        if ( hasWord("anime", videoChoice) == true ) {
+                            rVid = "videos/MegaAnime.mp4";
+                        }
+                        if ( hasWord("4x4", videoChoice) == true ) {
+                            window.location = "../cinema-royale/index.html";
+                        }
+                        vidInit(rVid)
+                        this.pop().pop();
+                    }, { prompt: ">> " });
+                };
+                if ( hasWord("video", response) == false ) {
+                    newPic = "url\(pictures/pic\\ \\" + randomPic()
+                    $('.stretchedvidWrapper').css("background-image", newPic);
+                    this.pop();
+                }
+            }, { prompt: ">> " });
+        },
+// #endregion --------------------------------------------------------------
+// #region                Color Customization
+//--------------------------------------------------------------------------  
+       
+        color: function () {
+          this.clear();
+          for (const x of colorHelp) { this.echo(x) }},
+        colors: function () {
+          this.clear();
+          for (const x of colorHelp) { this.echo(x) }},
+
+        border: function (input) {
+            if (input == undefined || input == "color" || input == "change" || input == "transparency") {
+                $('#editorWrapper').css("background-color", rColor(.9)) }
+            else { $('#editorWrapper').css("background-color", input) }},
+
+        colorborder: function (input) {
+            if (input == undefined || input == "color" || input == "change" || input == "transparency") {
+                $('#editorWrapper').css("background-color", rColor(.9)) }
+            else { $('#editorWrapper').css("background-color", input) }},
+
+        colorbg: function (input) {
+            $("video").css("display", "none");
+            $('.stretchedvidWrapper').css("background-image", "unset");
+            if ( input == undefined ) {
+                $(document.body).css("background-color", rColor(1)) }
+            else { $(document.body).css("background-color", input) }},
+
+        colorterm: function (input) {
+            if ( input == undefined ) { bgC = rColor(1) }
+            else { bgC = input };
+            $('.terminal').css("--background", bgC)
+            $('.cmd div').css("--color", tinycolor(bgC).spin(180).toHexString()) },
+        colortermtext: function (input) {
+            if ( input == undefined ) { bgC = rColor(1) }
+            else { bgC = input };
+            $('.cmd div').css("--color", bgC) },
+
+        termpic: function (input) {
+            if ( input == undefined ) {
+                $(document.body).css("background-color", rColor(1)) }
+            else { $(document.body).css("background-color", input) }},
+
+        colortext: function (input) {
+          if ( $('.cm-dialog .CodeMirror').css("background-image") == "none" ) {
+            var bgColor = $(".cm-dialog .CodeMirror").css("background")
+                $('.cm-bracket').css("color", randomReadable(bgColor))
+                $('.cm-comment').css("color", randomReadable(bgColor))
+                $('.cm-builtin').css("color", randomReadable(bgColor))
+            if (input == undefined || input == "change" || input == "random") {
+                $('.cm-number').css("color", randomReadable(bgColor))
+                $('.cm-variable').css("color", randomReadable(bgColor))
+                $('.cm-s-twilight.CodeMirror').css("color", randomReadable(bgColor))}
+            else {
+                $('.cm-s-twilight.CodeMirror').css("color", input)
+                let rc = randomComplement(bgColor, input); 
+                $('.cm-variable').css("color", rc)
+                $('.cm-number').css("color", randomComplement(rc, bgColor)) }}
+          else {
+            // random color tetrad if wpic is set and bg of codemirror doesn't matter
+            var colorTriad = tinycolor(rColor(1)).tetrad()
+                $('.cm-bracket').css("color", randomReadable(tinycolor(colorTriad[0]).complement().toHexString()))
+                $('.cm-comment').css("color", randomReadable(colorTriad[1].toHexString))
+                $('.cm-builtin').css("color", randomReadable(tinycolor(colorTriad[1]).complement().toHexString()))
+                $('.cm-number').css("color", randomReadable(colorTriad[2].toHexString))
+                $('.cm-variable').css("color", randomReadable(colorTriad[3].toHexString))
+                $('.cm-s-twilight.CodeMirror').css("color", randomReadable(colorTriad[0].toHexString)) }},
+
+        scheme: function (input) {
+            if (input == undefined || input == "color" || input == "change" ) {
+                var triadPal = tinycolor(rColor()).triad() }
+            else { var triadPal = tinycolor(input).triad() }
+                setBg = triadPal[1].toHexString()
+                monochromaticArray = tinycolor(setBg).monochromatic()
+                $('#editorWrapper').css("background-color", triadPal[0].toHexString())
+                $('.cm-dialog .CodeMirror').css("background", triadPal[0].toHexString())
+                $('.CodeMirror-gutters').css("border-right-color", triadPal[2].spin(30).toHexString())
+                $('.CodeMirror-gutters').css("background-color", triadPal[2].spin(30).toHexString())
+                $('.CodeMirror-gutter').css("background-color", triadPal[2].spin(30).toHexString())
+                $('.CodeMirror-gutter-elt').css("background-color", triadPal[2].spin(30).toHexString())
+                $('.cm-bracket').css("color", randomReadable(setBg))
+                $('.cm-comment').css("color", randomReadable(setBg))
+                $('.cm-builtin').css("color", randomReadable(setBg))
+                $('.cm-number').css("color", randomReadable(setBg))
+                $('.cm-variable').css("color", randomReadable(setBg))
+                $('.cm-s-twilight .CodeMirror').css("color", randomReadable(setBg))
+                $('.CodeMirror-linenumber').css("background-color", monochromaticArray[0].toHexString())
+                $('.CodeMirror-linenumbers').css("background-color", monochromaticArray[0].toHexString())
+                $('.download:hover').css("background-color", monochromaticArray[2].toHexString())       
+                $('.download').css("background-color", monochromaticArray[3].toHexString())      
+                $('.download').css("box-shadow", "unset")            
+                $('.download').css("color", randomReadable(monochromaticArray[3]))            
+                $('.download').css("border", monochromaticArray[4].toHexString())    
+                $('.cm-icons').css("background-color", rColor(1))
+                $('#theHeader').css("background-color", $('.cm-icons').css("background-color")) },
+
+        colordialog: function (input) {
+            if (input == undefined || input == "color" || input == "change" ) {
+                var triadPal = tinycolor(rColor()).triad() }
+            else { var triadPal = tinycolor(input).triad() }
+                setBg = triadPal[1].toHexString()
+                monochromaticArray = tinycolor(setBg).monochromatic()
+                $('.CodeMirror-gutters').css("border-right-color", triadPal[2].spin(30).toHexString())
+                $('.CodeMirror-gutters').css("background-color", triadPal[2].spin(30).toHexString())
+                $('.CodeMirror-gutter').css("background-color", triadPal[2].spin(30).toHexString())
+                $('.CodeMirror-gutter-elt').css("background-color", triadPal[2].spin(30).toHexString())
+                $('.CodeMirror-linenumber').css("background-color", monochromaticArray[0].toHexString())
+                $('.CodeMirror-linenumbers').css("background-color", monochromaticArray[0].toHexString())
+                $('.download:hover').css("background-color", monochromaticArray[2].toHexString())       
+                $('.download').css("background-color", monochromaticArray[3].toHexString())      
+                $('.download').css("box-shadow", "unset")            
+                $('.download').css("color", randomReadable(monochromaticArray[3]))            
+                $('.download').css("border", monochromaticArray[4].toHexString())    
+                $('.cm-icons').css("background-color", monochromaticArray[1].spin(180).toHexString())
+                $('#theHeader').css("background-color", $('.cm-icons').css("background-color")) },
+
+        colorwindow: function (input) {
+            if (input == undefined || input == "color" || input == "change" ) {
+                var triadPal = tinycolor(rColor()).triad() }
+            else { var triadPal = tinycolor(input).triad() }
+                setBg = triadPal[1].toHexString()
+                monochromaticArray = tinycolor(setBg).monochromatic()
+                $('.cm-dialog .CodeMirror').css("background", triadPal[1].toHexString())
+                $('.cm-bracket').css("color", randomReadable(setBg))
+                $('.cm-comment').css("color", randomReadable(setBg))
+                $('.cm-builtin').css("color", randomReadable(setBg))
+                $('.cm-number').css("color", randomReadable(setBg))
+                $('.cm-variable').css("color", randomReadable(setBg))
+                $('.cm-s-twilight .CodeMirror').css("color", triadPal[2].spin(30).toHexString())
+                $('.CodeMirror-line').css("color", randomReadable(setBg))
+                $('.CodeMirror-linenumber').css("background-color", monochromaticArray[0].toHexString())
+                $('.CodeMirror-linenumbers').css("background-color", monochromaticArray[0].toHexString())
+                $('.download:hover').css("background-color", monochromaticArray[2].toHexString())       
+                $('.download').css("background-color", monochromaticArray[3].toHexString())      
+                $('.download').css("box-shadow", "unset")            
+                $('.download').css("color", randomReadable(monochromaticArray[3]))            
+                $('.download').css("border", monochromaticArray[4].toHexString())    
+                $('.cm-icons').css("background-color", monochromaticArray[1].spin(180).toHexString())
+                $('#theHeader').css("background-color", $('.cm-icons').css("background-color")) },
+
+        windowpic: function (input) {
+                $('#editorWrapper').css("background-color", rColor(1))      
+                $('.cm-dialog .CodeMirror').css("background", rColor(1))
+                newPic = "url\(pictures/pic\\ \\" + randomPic("d")
+                $('.cm-dialog .CodeMirror').css("background-image", newPic);
+                $('.cm-dialog .CodeMirror').css("background-size", "cover"); 
+                $('.cm-dialog .CodeMirror').css("background-position", "center"); },
+
+        wpic: function (input) {
+                newPic = "url\(pictures/pic\\ \\" + randomPic("d")
+                $('.cm-dialog .CodeMirror').css("background-image", newPic); 
+                $('.cm-dialog .CodeMirror').css("background-size", "cover"); 
+                $('.cm-dialog .CodeMirror').css("background-position", "center"); },
+
+        hpic: function (input) {
+                newPic = "url\(pictures/pic\\ \\" + randomPic("d")
+                $('#theHeader').css("background-image", newPic);
+                $('.cm-icons').css("background", "transparent");
+                $('.cm-dialog .CodeMirror').css("background-size", "cover"); 
+                $('.cm-dialog .CodeMirror').css("background-position", "center"); },
+// #endregion --------------------------------------------------------------
+// #region                Code Editing
+//--------------------------------------------------------------------------  
+
+      syntax: function (input) {
+                  this.echo("[none] [javascript] [python] [lips]");
+                  this.push(function (language) {
+                      if ( language == "[none]" || language == "[null]" || language == "none" || language == "None") {
+                          language = "null"
+                      }
+                      myCodeMirror.setOption("mode", language)
+                      this.clear()
+                      this.echo("[hpic] or [wpic] for inline pics")
+                      this.echo("type 'color' for new color scheme");
+                      this.echo(" ~ to toggle the terminal");
+                      this.pop();
+                  }, { prompt: ">> " });
+      },
+      highlight: function (input) {
+                  this.echo("[none] [javascript] [python] [lips]");
+                  this.push(function (language) {
+                      if ( language == "[none]" || language == "[null]" || language == "none" || language == "None") {
+                          language = "null"
+                      }
+                      myCodeMirror.setOption("mode", language)
+                      this.clear()
+                      this.echo("[hpic] or [wpic] for inline pics")
+                      this.echo("type 'color' for new color scheme");
+                      this.echo(" ~ to toggle the terminal");
+                      this.pop();
+                  }, { prompt: ">> " });
+
+      },
+      highlighting: function (input) {
+                  this.echo("[none] [javascript] [python] [lips]");
+                  this.push(function (language) {
+                      if ( language == "[none]" || language == "[null]" || language == "none" || language == "None") {
+                          language = "null"
+                      }
+                      myCodeMirror.setOption("mode", language)
+                      this.clear()
+                      this.echo("[hpic] or [wpic] for inline pics")
+                      this.echo("type 'color' for new color scheme");
+                      this.echo(" ~ to toggle the terminal");
+                      this.pop();
+                  }, { prompt: ">> " });
+      },
+      language: function () {
+                  this.echo("[none] [javascript] [python] [lips]");
+                  this.push(function (language) {
+                      if ( language == "[none]" || language == "[null]" || language == "none" || language == "None") {
+                          language = "null"
+                      }
+                      myCodeMirror.setOption("mode", language)
+                      this.clear()
+                      this.echo("[hpic] or [wpic] for inline pics")
+                      this.echo("type 'color' for new color scheme");
+                      this.echo(" ~ to toggle the terminal");
+                      this.pop();
+                  }, { prompt: ">> " });
+                 },
+
+        download: () => {
+            $('#editorWrapper').css("border-radius", "initial")
+            $('#editorWrapper').css("opacity", "1")
+            const node = document.querySelector(".wrapper");
+            html2canvas(node, {
+                scale: window.devicePixelRatio
+            }).then(canvas => {
+                // document.body.appendChild(canvas);
+                var url = canvas.toDataURL("image/png");
+                download(url);
+            });
+            $('#editorWrapper').css("border-radius", "6px")
+            $('#editorWrapper').css("opacity", "unset")
+
+        },
+
+        help: function () {
+            this.clear()
+            this.echo("[clear] [bg] [color]\n[bgp] [bgv] [windowpic] [wpic] [hpic] \n\n[colortext] [border] [colorborder] [colorbg] \n[scheme] [colordialog] [colorwindow] \n\n[download] [run] [diff] [interpreter] [syntax] [tools] [language] [videos] [resize] [screenshot] [highlighting]  [resources] [python] [computeruse]\n\n[watch] [mute] [volume] [play] [pause] \n\n[cinema royale] [video] [1x1] [random] [anime4x4] [4x4] [loopgrid] [4x4w/anime] [6x6] [ascii] \n[pink bubbles] [rainbow term] [tv term] [tunnel] [v1] [widget term] [retro2.0]")
+        },
+
+        resize: function () {
+          let height;
+          const body = document.body;
+          var rect = dialog.getBoundingClientRect();
+          if ( parseInt($('#editorWrapper').css("height")) < (parseInt($('html').css("height"))* .82) ) {
+          height = rect.height;
+          body.style.setProperty('--height', rect.height * 1.5);
+          $('#editorWrapper').css("width", "690px");
+          }
+        },
+// #endregion --------------------------------------------------------------
+// #region                Directory/Help
+//--------------------------------------------------------------------------
+
+        tools: function () {
+            this.echo("\n\n[download] [run] [diff]\n[interpreter] [syntax] [language]\n[screenshot] [resources] [python]\n\nOther Editors: [pink bubbles] [rainbow term] [tv term] [widget term] [retro2.0]\n[help]")
+        },
+        videos: function () {
+            this.echo("\n\n[watch] [cinema royale]\n[mute] [volume] [play] \n[pause] [video] \n[1x1] [random] [anime4x4]\n[4x4] [loopgrid] [4x4w/anime]\n[6x6] [ascii] [v1] [help]]")
+        },
+        games: function () {
+            this.echo("\n\n[watch] [cinema royale]\n[mute] [volume] [play] \n[pause] [video] \n[1x1] [random] [anime4x4]\n[4x4] [loopgrid] [4x4w/anime]\n[6x6] [ascii] [v1] [help]]")
+        },
+        controls: function () {
+            this.echo("\n\n[watch] [mute] [volume] \n[play] [pause] [video] \n[1x1] [random] [anime4x4]\n[4x4] [loopgrid] [4x4w/anime]\n[6x6] [help]]")
+        },
+        more: function (input) {
+            if (input = "editors" ) {
+              this.echo("\n\n[pink bubbles] [rainbow term] [tv term] \n[widget term] [retro2.0]\n[help]")
+            }
+        },
+
+    });
+  });
+</script>
+<!-- Terminal Files -->
+<script src="js/jquery.terminal.js"></script>
+<!--Tiny Color-->
+<script src="js/tinyColor.js"></script>
+<script src="js/colorGen.js"></script>
+</body>
+</html>

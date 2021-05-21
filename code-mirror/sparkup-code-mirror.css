@@ -1,0 +1,113 @@
+.wrapper {
+    margin: 10px;
+    width: 635px;
+    height: calc((var(--height, 695) - 120) * 1px);
+    background-image: unset;
+    border-radius: 6px;
+}
+.box {
+    margin: 0px;
+    width: 715px;
+    height: calc(var(--height, 695) * 1px);
+    border-radius: 5px;
+}
+.CodeMirror {
+  height: auto;
+}
+
+/* #region --------------Editor Components--------------  */
+
+
+.download {
+    box-shadow:inset 0px -2px 6px 0px rgba(7	54	66, 0.67);;
+    background:linear-gradient(to bottom,rgba(7,54,66, 0.7) 5%, rgba(0,43,54, .9) 100%);
+    background-color:rgba(0,43,54, 0.48);;
+    border-radius:3px;
+    border:1px solid #0b0e07;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:12px;
+    padding:5px 7px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #263666;
+    margin-left: 74%;
+}
+.download:hover {
+    background:linear-gradient(to bottom, #0688fa 5%, #2dabf9 100%);
+    background-color:#0688fa;
+}
+.download:active {
+    position:relative;
+    top:1px;
+}
+.wrapper, .cm-dialog, .cm-shadow-box, .box {
+    overflow: hidden;
+    position: absolute;
+    top: 54%;
+    left: 50%;
+    transform: translate(-50%, -54%);
+}
+.cm-dialog {
+    width: 96.2%;
+    height: 93.7%;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.8) 0px 20px 68px;
+    --background: #656176;
+    background: var(--background, white);
+    z-index: 100;
+    opacity: .99;
+    background-size: contain;
+    background-repeat: repeat;   
+}
+.cm-dialog header {
+    padding: 10px;
+    -webkit-margin-collapse: discard;
+    background-size: contain;
+    background-repeat: repeat;
+}
+.cm-dialog .cm-body {
+    height: calc(100% - 38px);
+    background-size: contain;
+    background-repeat: repeat;  
+}
+.cm-dialog .CodeMirror {
+    background: var(--background, white);
+    line-height: 1.4em;
+    height: 100%;
+    background-size: cover; 
+}
+.cm-dialog .cm-s-seti .CodeMirror-gutters {
+    background-color: var(--background, white);
+}
+.cm-icons {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.cm-icons li {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: red;
+    border-radius: 50%;
+}
+.cm-icons li:first-child {
+    background: #FF5F56;
+}
+.cm-icons li:nth-child(2) {
+    background: #FFBD2E;
+}
+.cm-icons li:last-child {
+    background: #27C93F;
+}
+
+.note a, .note a:visited {
+    color: #005DB6;
+    text-decoration: none;
+}
+.note a:hover {
+    text-decoration: underline;
+}
+
+/* #endregion --------------------------------------  */

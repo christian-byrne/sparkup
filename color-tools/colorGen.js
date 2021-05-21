@@ -17,6 +17,34 @@ function randomHex() {
   return color;
 }
 
+function rColor(alphaValue) {
+  alphaValue = alphaValue || (Math.random() * 1).toPrecision(2)
+  return tinycolor.random().setAlpha(alphaValue).toRgbString() 
+}
+
+function randomReadable(bgColor) {
+  colorIter = rColor(1)
+  for (let i = 0; i < 100; i++) {
+      if ( tinycolor.isReadable(colorIter, bgColor, {level: "AAA"}) == false ) {
+          colorIter = rColor(1)
+      } 
+      else { return colorIter } 
+  }
+  return tinycolor.mostReadable(bgColor, ["FF09CE", "FFFFFF", "000000", "424343", "361D2E", "2BFFD1", "4FE5FF", "FF5A4B"]).toHexString()
+}
+
+function randomComplement(bgColor, partner) {
+  colorIter = tinycolor(partner).complement().toString()
+  for (let i = 0; i < 100; i++) {
+      if ( tinycolor.isReadable(colorIter, bgColor, {level: "AAA"}) == false ) {
+      // Spin 5 degrees on color wheel until complement is readable on bg color
+      colorIter = tinycolor(colorIter).spin(5).toString()
+      } 
+      else { return colorIter }
+  }
+  return tinycolor.mostReadable(bgColor, ["FF09CE", "FFFFFF", "000000", "424343", "361D2E", "2BFFD1", "4FE5FF", "FF5A4B"]).toHexString()
+}
+
 //-------------Color Model Convertors-------------\\
 
 

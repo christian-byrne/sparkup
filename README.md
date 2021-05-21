@@ -18,17 +18,22 @@
 
 <a name="features"/>
 
-- syntax highlighting for different languages
-- automatic indenting, error checking, and parenthesis completion
-- diff checker
-- refrence manuals for built in functions of different languages
-- psuedo interpreter/compiler
+- syntax highlighting for 40+ languages
+- automatic indenting, error checking, parenthesis completion, match tags
+- comment out chunks, linters, section folding
+- keymaps for emacs, vim, sublime, psuedo interpreter/compiler
 - quake terminal control interface with command memory, help, clear, etc.
-- random color schemes from complementary color scheme algorithm
+- library of common editor themes
+- random color schemes from complementary color scheme algorithm 
 - automatic contrast text color
 - cycle through random picture, video or color scheme backgrounds for canvas, border, or background
-- export, download, and save work
+- export, download, save, screenshot
 
+<a name="options-demo"/>
+
+###### Options *(display with help command)*
+
+![picture of options](demo/terminal-options.png)
 
 -----------
 
@@ -39,6 +44,7 @@
 
 ![output screenshot example](demo/screenshot-output1.png)
 
+![output screenshot example 2](demo/screenshot-output3.png)
 
 
 

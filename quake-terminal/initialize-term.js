@@ -16,7 +16,7 @@
         name: 'term',
         height: 320,
         enabled: false,
-        greetings: "[bg] [colors] [resize] [wpic] [hpic]\n[language] to choose coding language\n[tools] for programming tools like diff or run\n[videos] [games] [controls] [more-editors]\n[help]",
+        greetings: "[[b;red;]Coding Tools:] [language] [download] [screenshot] [run] [tools] [addons]\n[[b;red;]Other:] [clear] [mute] [play] [pause] [resize]\n[[b;red;]Terminal Theme:] [colorterm] [colortermtext]\n[[b;red;]Page Background:] [bg] [bgp] [bgv] [colorbg]\n[[b;red;]Editor Theme:] [theme [theme name]] (e.g., 'theme dracula') [theme random] \n[[b;red;]Editor Background:] [windowpic] [colorwindow] [hpic] [scheme]\n[[b;red;]Editor Components:] [colordialog] [colortext] [random everything]\n[[b;red;]Display Customization Options:] [bg] [coloroptions] [showthemes]",
         checkArity: false,
         history: true,
         memory: true,

@@ -3,6 +3,16 @@
 
 ## sparkup 
 
+###### TODO:
+- fix all language selections
+- add list of add-ons & test/fix all
+- cookies
+- fix clock glitch rate
+- optimize bg video upload rate/size (load first also?)
+- download function -> save canvas
+- contact button
+- new demo across multiple webp files
+
 ###### Customizable Screenshot Canvas
 
 <a name="demo"/>

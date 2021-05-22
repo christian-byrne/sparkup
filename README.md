@@ -12,7 +12,8 @@
 - download function -> save canvas
 - contact button
 - new demo across multiple webp files
-
+- fix colorHelp variable in quake-terminal/commands.js
+- fix showThemes function so that it matches the colorHint function (array wherein each element's length < length of terminal)
 ###### Customizable Screenshot Canvas
 
 <a name="demo"/>
